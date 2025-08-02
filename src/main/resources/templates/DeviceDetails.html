@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Device Details</title>
+  <style>
+    /* Reset margin and padding */
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    /* Container for content */
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    h1, h2 {
+      color: #2c3e50;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 25px;
+      background: #fff;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    table th, table td {
+      text-align: left;
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    table th {
+      background-color: #3498db;
+      color: white;
+      width: 150px;
+    }
+
+    form {
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      border-radius: 6px;
+      margin-bottom: 30px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 6px;
+      color: #555;
+    }
+
+    input[type="number"], textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      resize: vertical;
+    }
+
+    textarea {
+      min-height: 80px;
+    }
+
+    button {
+      margin-top: 20px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:disabled {
+      background-color: #bdc3c7;
+      cursor: not-allowed;
+    }
+
+    button:hover:not(:disabled) {
+      background-color: #2980b9;
+    }
+
+    p[th\\:if] {
+      font-weight: bold;
+      margin-top: 15px;
+      color: #e74c3c; /* red */
+      background: #fceaea;
+      padding: 10px 15px;
+      border: 1px solid #e74c3c;
+      border-radius: 4px;
+    }
+
+    /* Admin section */
+    div[th\\:if] {
+      margin-top: 40px;
+      padding: 20px;
+      background: #f0f8ff;
+      border-radius: 6px;
+      box-shadow: 0 0 6px rgba(52, 152, 219, 0.3);
+    }
+
+    div[th\\:if] h2 {
+      color: #2980b9;
+      border-color: #2980b9;
+      margin-bottom: 15px;
+    }
+
+    div[th\\:if] form button {
+      background-color: #27ae60;
+    }
+
+    div[th\\:if] form button:hover {
+      background-color: #1e8449;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Full width header -->
+<div th:replace="fragments/header :: header"></div>
+
+<!-- Container for main page content -->
+<div class="container">
+
+  <h1>Device Details</h1>
+
+  <table>
+    <!-- <tr><th>ID:</th><td th:text="${id}"></td></tr> -->
+    <tr><th>Name:</th><td th:text="${name}"></td></tr>
+    <tr><th>Serial Number:</th><td th:text="${serialNumber}"></td></tr>
+    <tr><th>Asset ID:</th><td th:text="${assetId}"></td></tr>
+    <tr><th>Availability:</th><td th:text="${status}"></td></tr>
+    <tr th:if="${isAssigned}"><th>Assigned To:</th><td th:text="${assignedUserName}"></td></tr>
+    <tr th:if="${isAssigned}"><th>Assigned User Mail:</th><td th:text="${assignedUserMail}"></td></tr>
+    <tr th:if="${isAdmin}"><th>DeviceLocation</th><td th:text="${devicePhysicalLocation}"></td></tr>
+
+  </table>
+
+  <hr>
+
+  <!-- Request Form -->
+  <h2>Request This Device</h2>
+
+  <p th:if="${#strings.toUpperCase(#strings.trim(status)) != 'AVAILABLE'}" style="color: red;">
+    This device is currently not available for requests.
+  </p>
+
+  <form th:action="@{/request(deviceId=${id})}" method="post">
+    <input type="hidden" name="deviceId" th:value="${id}" />
+
+    <label>Number of Days:</label>
+    <input type="number" name="days" required min="1" />
+
+    <label>Reason:</label>
+    <textarea name="reason" rows="4" cols="50" required></textarea>
+
+    <button type="submit"
+            th:disabled="${#strings.toUpperCase(#strings.trim(status)) != 'AVAILABLE'}">
+      Request
+    </button>
+  </form>
+
+  <hr>
+
+  <div th:if="${isAdmin}">
+    <h2>Admin Options</h2>
+    <form th:action="@{/devices/edit(deviceId=${id})}" method="get">
+      <input type="hidden" name="deviceId" th:value="${id}" />
+      <button type="submit">Edit Device</button>
+    </form>
+  </div>
+
+</div>
+
+</body>
+</html>

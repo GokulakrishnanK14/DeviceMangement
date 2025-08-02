@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Rejected Requests</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style>
+        html, body {
+          margin: 0;
+          padding: 0;
+        }
+
+        body {
+          background-color: #f9f9f9;
+          font-family: Arial, sans-serif;
+        }
+
+        .content-wrapper {
+          padding-top: 30px; /* Adjust if your header is fixed and taller */
+          max-width: 900px;
+          margin: 0 auto;
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+
+        h1 {
+          text-align: center;
+          color: #2c3e50;
+          margin-bottom: 40px;
+          border-bottom: 2px solid #3498db;
+          padding-bottom: 10px;
+        }
+
+        .table-container {
+          background-color: white;
+          border-radius: 10px;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+          overflow: hidden;
+        }
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+
+        thead {
+          background-color: #3498db;
+          color: white;
+        }
+
+        th, td {
+          padding: 15px;
+          text-align: left;
+          border-bottom: 1px solid #ddd;
+          font-size: 16px;
+        }
+
+        tbody tr:hover {
+          background-color: #f1f9ff;
+        }
+
+        .pagination {
+          justify-content: center;
+          margin-top: 30px;
+        }
+
+        .pagination .page-item.active .page-link {
+          background-color: #3498db;
+          border-color: #3498db;
+          color: white;
+        }
+
+        .empty-message {
+          text-align: center;
+          font-size: 18px;
+          color: #888;
+          padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header Fragment -->
+<div th:replace="fragments/header :: header"></div>
+
+<!-- Main Content -->
+<div class="content-wrapper">
+    <h1>Rejected Requests</h1>
+
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Requested Device</th>
+                <th>Serial Number</th>
+                <th>Asset ID</th>
+                <th>Requested Date</th>
+                <th>Rejected By</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="request, iterStat : ${rejectedReqList}">
+                <td th:text="${iterStat.index + 1}">1</td>
+                <td th:text="${request.device.name}">Device Name</td>
+                <td th:text="${request.device.serialNumber}">Serial Number</td>
+                <td th:text="${request.device.assetId}">Asset ID</td>
+                <td th:text="${#temporals.format(request.requestedDate, 'dd MMM yyyy HH:mm')}">Requested Date</td>
+                <td th:text="${request.reqProcessedBy != null ? request.reqProcessedBy.name : 'N/A'}">Rejected By</td>
+            </tr>
+            <tr th:if="${rejectedReqList == null or rejectedReqList.isEmpty()}">
+                <td colspan="6" class="empty-message">No rejected requests available.</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <nav th:if="${rejectedReqList != null and !rejectedReqList.isEmpty() and totalPages > 1}">
+            <ul class="pagination">
+                <li th:if="${currentPage > 0}" class="page-item">
+                    <a class="page-link" th:href="@{/request/user/rejected(page=${currentPage - 1})}">Previous</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(
+                        (currentPage - 2 > 0 ? currentPage - 2 : 0),
+                        (currentPage + 2 < totalPages - 1 ? currentPage + 2 : totalPages - 1))}"
+                    th:classappend="${i == currentPage} ? 'active'" class="page-item">
+                    <a class="page-link" th:href="@{/request/user/rejected(page=${i})}" th:text="${i + 1}">1</a>
+                </li>
+                <li th:if="${currentPage < totalPages - 1}" class="page-item">
+                    <a class="page-link" th:href="@{/request/user/rejected(page=${currentPage + 1})}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+</body>
+</html>

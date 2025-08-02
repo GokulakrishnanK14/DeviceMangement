@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>All Devices</title>
+  <style>
+    /* Reset margin and padding on html and body */
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    /* Container for the main content */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 10px;
+    }
+
+    h3 {
+      margin-top: 40px;
+      color: #2980b9;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background: #fff;
+      margin-top: 15px;
+      margin-bottom: 40px;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px 15px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #3498db;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    a {
+      color: #3498db;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Full width header -->
+<div th:replace="fragments/header :: header"></div>
+
+<!-- Container for page content -->
+<div class="container">
+  <h2>All Devices</h2>
+
+  <div th:each="entry : ${devicesByType}">
+    <h3 th:text="${entry.key}">Device Type</h3>
+
+    <table>
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Serial Number</th>
+        <th>Asset ID</th>
+        <th>Manufacturer</th>
+        <th>Status</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="device : ${entry.value}">
+        <td>
+          <a th:href="@{/devices/details(
+                            id=${device.id},
+                            name=${device.name},
+                            serialNumber=${device.serialNumber},
+                            assetId=${device.assetId},
+                            status=${device.status}
+                        )}"
+             th:text="${device.name}"></a>
+        </td>
+        <td th:text="${device.serialNumber}"></td>
+        <td th:text="${device.assetId}"></td>
+        <td th:text="${device.manufacturer}"></td>
+        <td th:text="${device.status}"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</body>
+</html>

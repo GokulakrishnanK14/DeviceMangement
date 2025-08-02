@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+<div th:fragment="header"
+     style="
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         padding: 10px 20px;
+         background-color: #3498db;
+         color: white;
+         width: 100%;
+         box-sizing: border-box;
+         margin: 0;
+       ">
+  <a th:href="@{/home}" style="color: white; text-decoration: none; font-weight: bold;">Home</a>
+  <a th:href="@{/logout}" style="color: white; text-decoration: none; font-weight: bold;">Logout</a>
+</div>
+</body>
+</html>

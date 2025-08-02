@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Return Requests</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    .content-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      padding-top: 30px; /* adjust if your header is fixed */
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #3498db;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    .btn-acquire {
+      padding: 6px 12px;
+      background-color: #2ecc71;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .btn-acquire:hover {
+      background-color: #27ae60;
+    }
+
+    .no-data {
+      text-align: center;
+      font-style: italic;
+      color: #777;
+      margin-top: 20px;
+    }
+
+    .success-message {
+      text-align: center;
+      color: green;
+      font-weight: bold;
+      margin-bottom: 20px;
+      animation: fadeOut 0.5s ease-in-out 3s forwards;
+      overflow: hidden;
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        height: 0;
+        padding: 0;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Include header if needed -->
+<div th:replace="fragments/header :: header"></div>
+
+<!-- Main content below the header -->
+<div class="content-wrapper">
+  <h1>Return Requested Devices</h1>
+
+  <!-- Success message with CSS animation -->
+  <div th:if="${result == 'success'}" class="success-message">
+    ✅ Device Acquired Successfully!
+  </div>
+
+  <table th:if="${#lists.size(ReturnStatus) > 0}">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Device Name</th>
+      <th>Device SNo</th>
+      <th>Device AssetId</th>
+      <th>Requested User</th>
+      <th>Device Assigned Date</th>
+      <th>Approved By</th>
+      <th>Return Requested Date</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="req, iterStat : ${ReturnStatus}">
+      <td th:text="${iterStat.index + 1}">1</td>
+      <td th:text="${req.device.name}">DeviceName</td>
+      <td th:text="${req.device.serialNumber}">Serial Number</td>
+      <td th:text="${req.device.assetId}">Asset Id</td>
+      <td th:text="${req.user.name}">Name</td>
+      <td th:text="${#temporals.format(req.deviceAssignedDate, 'dd MMM yyyy HH:mm')}">Device Assigned Date</td>
+      <td th:text="${req.reqProcessedBy?.name}">Admin Name</td>
+      <td th:text="${#temporals.format(req.returnRequestedDate, 'dd MMM yyyy HH:mm')}">Return Requested Date</td>
+      <td>
+        <a th:href="@{'/request?adminAction=3&reqId=' + ${req.id}}" class="btn-acquire">
+          Acquire
+        </a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <p class="no-data" th:if="${#lists.isEmpty(ReturnStatus)}">
+    No return requests to process.
+  </p>
+</div>
+
+</body>
+</html>

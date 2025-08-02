@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px auto;
+            max-width: 500px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        form {
+            background: #fff;
+            padding: 25px 30px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+            border-radius: 6px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 6px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .error-message {
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #e74c3c;
+            background: #fceaea;
+            padding: 10px 15px;
+            border: 1px solid #e74c3c;
+            border-radius: 4px;
+        }
+
+        .create-account-wrapper {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .create-account-button {
+            width: 100%;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .create-account-button:hover {
+            background-color: #2980b9;
+        }
+
+        a.button-link {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Login</h1>
+
+<form th:action="@{/login}" method="post">
+    <div th:if="${param.error}" class="error-message">
+        <p>Invalid username or password.</p>
+    </div>
+
+    <label>Email:</label>
+    <input type="text" name="email" required />
+
+    <label>Password:</label>
+    <input type="password" name="password" required />
+
+    <button type="submit">Login</button>
+
+    <div class="create-account-wrapper">
+        <p>Don't have an account?</p>
+        <a href="/signup" class="button-link">
+            <button type="button" class="create-account-button">Create Account</button>
+        </a>
+    </div>
+</form>
+
+</body>
+</html>

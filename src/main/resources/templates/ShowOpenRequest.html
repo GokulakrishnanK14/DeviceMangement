@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Open Requests</title>
+    <style>
+        /* Reset default spacing */
+        html, body {
+          margin: 0;
+          padding: 0;
+        }
+
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f9f9f9;
+          color: #333;
+        }
+
+        /* Wrapper for page content under the header */
+        .content-wrapper {
+          max-width: 900px;
+          margin: 0 auto;
+          padding: 20px;
+          padding-top: 30px; /* adjust if your header has height */
+        }
+
+        h1 {
+          color: #2c3e50;
+          text-align: center;
+          margin-bottom: 30px;
+          border-bottom: 2px solid #3498db;
+          padding-bottom: 10px;
+        }
+
+        .content-box {
+          background: #fff;
+          padding: 25px 30px;
+          box-shadow: 0 0 8px rgba(0,0,0,0.1);
+          border-radius: 6px;
+        }
+
+        .result-bar {
+          margin-bottom: 20px;
+          padding: 12px 15px;
+          border-radius: 4px;
+          font-weight: bold;
+          text-align: center;
+          animation: fadeOut 0.5s ease-out 3s forwards;
+        }
+
+        .result-success {
+          background-color: #dff0d8;
+          color: #3c763d;
+          border: 1px solid #d6e9c6;
+        }
+
+        .result-error {
+          background-color: #fceaea;
+          color: #e74c3c;
+          border: 1px solid #e74c3c;
+        }
+
+        .result-rejected {
+          background-color: #f9e2e3;
+          color: #a94442;
+          border: 1px solid #d9534f;
+        }
+
+        @keyframes fadeOut {
+          to {
+            opacity: 0;
+            height: 0;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+          }
+        }
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+        }
+
+        th, td {
+          text-align: left;
+          padding: 12px 15px;
+          border-bottom: 1px solid #ddd;
+        }
+
+        th {
+          background-color: #3498db;
+          color: white;
+        }
+
+        tr:hover {
+          background-color: #f1f1f1;
+        }
+
+        .dropdown {
+          position: relative;
+          display: inline-block;
+        }
+
+        .dropdown-button {
+          background-color: #3498db;
+          color: white;
+          border: none;
+          padding: 8px 12px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 14px;
+        }
+
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #fff;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+          z-index: 1;
+          min-width: 120px;
+          border-radius: 4px;
+          overflow: hidden;
+        }
+
+        .dropdown-content a {
+          display: block;
+          padding: 10px;
+          color: #333;
+          text-decoration: none;
+        }
+
+        .dropdown-content a:hover {
+          background-color: #f1f1f1;
+        }
+
+        .dropdown:hover .dropdown-content {
+          display: block;
+        }
+
+        .alert {
+          font-weight: bold;
+          margin-top: 20px;
+          color: #e74c3c;
+          background: #fceaea;
+          padding: 10px 15px;
+          border: 1px solid #e74c3c;
+          border-radius: 4px;
+          text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Include header fragment -->
+<div th:replace="fragments/header :: header"></div>
+
+<!-- Content below the header -->
+<div class="content-wrapper">
+    <h1>Open Device Requests</h1>
+
+    <div class="content-box">
+        <div th:if="${result}"
+             th:class="'result-bar ' +
+               (${result} == 'success' ? 'result-success' :
+                (${result} == 'rejected' ? 'result-rejected' : 'result-error'))">
+            <p th:text="
+        ${result} == 'success' ? 'Device assigned to user' :
+        (${result} == 'rejected' ? 'Request Rejected' :
+        'Device might be assigned to other user/under maintenance/not available')">
+            </p>
+        </div>
+
+        <div th:if="${reqAvailable}">
+            <table>
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Device</th>
+                    <th>Requested Date</th>
+                    <th>Days</th>
+                    <th>User</th>
+                    <th>Approve/Reject</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="req, iterStat : ${requestList}">
+                    <td th:text="${iterStat.index + 1}">1</td>
+                    <td th:text="${req.device.name}">Device Name</td>
+                    <td th:text="${#temporals.format(req.requestedDate, 'dd MMM yyyy HH:mm')}">Requested Date</td>
+                    <td th:text="${req.requestedDays}">5</td>
+                    <td th:text="${req.user.name}">John Doe</td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="dropdown-button">Action</button>
+                            <div class="dropdown-content">
+                                <a th:href="@{/request(adminAction=1, reqId=${req.id})}">Approve</a>
+                                <a th:href="@{/request(adminAction=2, reqId=${req.id})}">Reject</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${!reqAvailable}">
+            <p class="alert">No open requests available.</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

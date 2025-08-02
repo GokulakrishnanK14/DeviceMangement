@@ -1,0 +1,43 @@
+1. Endpoint authorisation               Done
+2. Password validation                  Done
+4. Pagination                           Done
+5. Rejected flag                        Done
+6. Home Page Split                      Done
+9. request/user/returned                Done
+11. Device Page Split                   Done
+12. Duplicate Request handling          Done
+11. Singup validation in front end      DONE
+12. Home page redirection after signUP  DONE
+15. Device Edit                         Done
+16. Device Image URL                    Done
+17. Device Detail page
+ assinged user detail                   Done
+18. Home button in error page           Done
+21. signup icon in login                Done
+14. Soft Delete methods                 Done (through edit device)
+28. Device Physical Location            Done
+27. Sort pagination in desc             Done (need to test)
+#. device waiting for return            Done
+
+
+
+
+
+HIGH PRIORITY
+3. Password reset  (mail issue)
+19. Device page split  ---- 22. available device view  --23. assigned device view
+
+
+MEDIUM PRIORITY
+26. Password mapping
+
+
+LESS PRIORITY
+
+20. login icon in signup
+7. User Profile Update
+8. Super Admin Functionality (Set User Inactive)  -- 10. User activity for admin
+24. maintenance and not availble device
+
+25. all user view (admin activity)
+13. Admin Query and Table Formation

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Device</title>
+    <style>
+        /* Reset margin and padding */
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Compensate for the header's padding/margin without modifying it */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        /* Optional: space under header if it's fixed */
+        .content-wrapper {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 30px; /* adjust if header height changes */
+        }
+
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        form {
+            background: #fff;
+            padding: 25px 30px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            color: #555;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        button {
+            margin-top: 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        div[th\\:if] {
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #e74c3c;
+            background: #fceaea;
+            padding: 10px 15px;
+            border: 1px solid #e74c3c;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Include Header -->
+<div th:replace="fragments/header :: header"></div>
+
+<!-- Page Content -->
+<div class="content-wrapper">
+    <h2>Add Device</h2>
+
+    <div th:if="${errorMessage}">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <form th:action="@{/devices/addNew}" th:object="${deviceDTO}" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" th:field="*{name}" required />
+
+        <label for="deviceType">Device Type:</label>
+        <input type="text" id="deviceType" th:field="*{deviceType}" required />
+
+        <label for="serialNumber">Serial Number:</label>
+        <input type="text" id="serialNumber" th:field="*{serialNumber}" />
+
+        <label for="assetId">Asset ID:</label>
+        <input type="text" id="assetId" th:field="*{assetId}" />
+
+        <label for="description">Description:</label>
+        <textarea id="description" th:field="*{description}"></textarea>
+
+        <label for="manufacturer">Manufacturer:</label>
+        <input type="text" id="manufacturer" th:field="*{manufacturer}" required />
+
+        <label for="devicePhysicalLocation">Device Location:</label>
+        <input type="text" id="devicePhysicalLocation" th:field="*{devicePhysicalLocation}" required />
+
+        <button type="submit">Save Device</button>
+    </form>
+</div>
+
+</body>
+</html>
